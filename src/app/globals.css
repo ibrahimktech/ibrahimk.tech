@@ -1,0 +1,208 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* ---------------------------------------------------------------------------
+   Design tokens. One accent colour; light and dark follow the system setting.
+   --------------------------------------------------------------------------- */
+:root {
+  color-scheme: light dark;
+  --bg: #fafaf9;
+  --fg: #1c1917;
+  --muted: #57534e;
+  --border: #e7e5e4;
+  --surface: #f5f5f4;
+  --accent: #c2410c;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0c0a09;
+    --fg: #e7e5e4;
+    --muted: #a8a29e;
+    --border: #292524;
+    --surface: #1c1917;
+    --accent: #fb923c;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-surface: var(--surface);
+  --color-accent: var(--accent);
+  --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+@layer base {
+  html {
+    background: var(--bg);
+    color: var(--fg);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+}
+
+/* Plain underlined link used across the site. */
+@utility link {
+  color: var(--fg);
+  text-decoration-line: underline;
+  text-decoration-color: var(--border);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: text-decoration-color 120ms;
+  &:hover {
+    text-decoration-color: var(--accent);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Long-form writing (blog posts).
+   --------------------------------------------------------------------------- */
+.prose {
+  --tw-prose-body: var(--fg);
+  --tw-prose-headings: var(--fg);
+  --tw-prose-lead: var(--muted);
+  --tw-prose-links: var(--fg);
+  --tw-prose-bold: var(--fg);
+  --tw-prose-counters: var(--muted);
+  --tw-prose-bullets: var(--muted);
+  --tw-prose-hr: var(--border);
+  --tw-prose-quotes: var(--fg);
+  --tw-prose-quote-borders: var(--accent);
+  --tw-prose-captions: var(--muted);
+  --tw-prose-kbd: var(--fg);
+  --tw-prose-code: var(--fg);
+  --tw-prose-pre-code: var(--fg);
+  --tw-prose-pre-bg: var(--surface);
+  --tw-prose-th-borders: var(--border);
+  --tw-prose-td-borders: var(--border);
+  font-family: var(--font-sans);
+}
+
+/* Short notes (learning cards): sans-serif body, accent bullets. */
+.prose.prose-sans {
+  --tw-prose-bullets: var(--accent);
+  font-family: var(--font-sans);
+}
+
+.prose.prose-sans :where(ul, ol, p) {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.prose.prose-sans :where(p + p, ul + p, p + ul) {
+  margin-top: 0.75em;
+}
+
+.prose.prose-sans :where(li) {
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}
+
+.prose.prose-sans :where(ul, ol) {
+  padding-left: 1.1em;
+}
+
+.prose.prose-sans :where(li) {
+  padding-left: 0.25em;
+}
+
+.prose :where(img) {
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  height: auto;
+}
+
+.prose :where(h1, h2, h3, h4) {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.prose :where(a) {
+  text-decoration-color: var(--accent);
+  text-underline-offset: 3px;
+  font-weight: inherit;
+}
+
+.prose :where(blockquote) {
+  font-style: normal;
+}
+
+.prose :where(blockquote p:first-of-type)::before,
+.prose :where(blockquote p:last-of-type)::after {
+  content: none;
+}
+
+/* Inline code: no backticks, subtle chip. */
+.prose :where(code):not(:where(pre code))::before,
+.prose :where(code):not(:where(pre code))::after {
+  content: none;
+}
+
+.prose :where(code):not(:where(pre code)) {
+  font-weight: 400;
+  font-size: 0.85em;
+  padding: 0.15em 0.35em;
+  border-radius: 4px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.prose :where(table) {
+  font-family: var(--font-sans);
+  font-size: 0.875em;
+  display: block;
+  overflow-x: auto;
+}
+
+/* Code blocks (rehype-pretty-code + Shiki dual themes). */
+.prose :where(figure[data-rehype-pretty-code-figure]) {
+  margin: 1.75em 0;
+}
+
+.prose :where(pre) {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1em 0;
+  font-size: 0.85em;
+  line-height: 1.7;
+  overflow-x: auto;
+}
+
+.prose :where(pre code) {
+  display: grid;
+  font-family: var(--font-mono);
+}
+
+.prose :where(pre [data-line]) {
+  padding: 0 1.15em;
+}
+
+[data-rehype-pretty-code-figure] span[style*="--shiki-light"] {
+  color: var(--shiki-light);
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-rehype-pretty-code-figure] span[style*="--shiki-dark"] {
+    color: var(--shiki-dark);
+  }
+}
